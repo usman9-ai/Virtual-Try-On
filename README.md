@@ -3,7 +3,7 @@
 
 | Input Person | Input Garment | Output Try-On |
 |:------------:|:-------------:|:-------------:|
-| ![Person Image](./images/person 1.jpg) | ![Garment Image](./placeholder-garment.jpg) | ![Result Image](./placeholder-result.jpg) |
+| ![Person Image](./person 1.jpg) | ![Garment Image](./placeholder-garment.jpg) | ![Result Image](./placeholder-result.jpg) |
 | ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
 | ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
 | ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
