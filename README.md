@@ -1,23 +1,25 @@
 # Virtual Try-On with DensePose & Stable Diffusion
 
-**A research-grade pipeline to transfer garments onto human images using DensePose + diffusion models, with a React/Next.js front-end.**
+**A research-grade pipeline to transfer garments onto human images using DensePose + diffusion models, with a Next.js/FastAPI front-end and backend.**
 
 ---
 
 ## 🔍 Table of Contents
 
 1. [Project Overview](#project-overview)  
-2. [Directory Structure](#directory-structure)  
-3. [Methodology](#methodology)  
-4. [Installation](#installation)  
-5. [Usage](#usage)  
-   - [Backend (API)](#backend-api)  
-   - [Frontend (Web UI)](#frontend-web-ui)  
-6. [Configuration](#configuration)  
-7. [Examples](#examples)  
-8. [Testing & CI](#testing--ci)  
-9. [Contributing](#contributing)  
-10. [License](#license)  
+2. [Quick Start Guide](#-quick-start-guide)  
+3. [Directory Structure](#directory-structure)  
+4. [Methodology](#methodology)  
+5. [Installation](#installation)  
+6. [Setting Up External Services](#-setting-up-external-services)  
+7. [Usage](#usage)  
+   - [Backend (FastAPI)](#backend-fastapi)  
+   - [Frontend (Next.js)](#frontend-nextjs)  
+8. [Configuration](#configuration)  
+9. [Sample Results](#sample-results)  
+10. [Troubleshooting](#troubleshooting)  
+11. [Contributing](#contributing)  
+12. [License](#license)  
 
 ---
 
@@ -27,8 +29,8 @@ This repository implements a **virtual try-on** system that:
 
 1. Detects human body landmarks & segments the person using DensePose.  
 2. Extracts, warps, and masks garments.  
-3. Fuses the garment onto the person via a Stable Diffusion-based pipeline for photorealism.  
-4. Provides a **React/Next.js** frontend for live demo and batch processing.
+3. Fuses the garment onto the person via image processing techniques and optionally via a diffusion-based pipeline for photorealism.  
+4. Provides a **Next.js** frontend with a **FastAPI** backend for user interaction and image processing.
 
 ---
 
@@ -36,19 +38,24 @@ This repository implements a **virtual try-on** system that:
 
 ```text
 .
-├── FrontEnd/                # Next.js + TailwindCSS app
-│   ├── app/                 # page & API routes
-│   ├── components/          # UI components
-│   └── utils/               # client-side helpers
-├── densepose/               # DensePose integration
-├── model/                   # custom model code & pipeline
-├── data/                    # dataset loaders & transforms
-├── engine/                  # training & evaluation scripts
-├── evaluation/              # metrics, alignment, etc.
-├── utils/                   # misc helpers (logging, db, IO)
-├── requirements.txt         # Python deps
-├── Dockerfile               # optional containerization
-└── README.md
+├── frontend/              # Next.js application
+│   ├── app/               # page & API routes
+│   ├── components/        # UI components
+│   ├── fastAPI/           # FastAPI backend server
+│   ├── styles/            # CSS and styling
+│   └── utils/             # client-side helpers
+├── densepose/             # DensePose integration
+│   ├── modeling/          # Model architecture
+│   ├── data/              # Dataset handling
+│   ├── evaluation/        # Metrics and evaluation
+│   └── utils/             # Utilities for DensePose
+├── model/                 # custom model code & pipeline
+│   ├── SCHP/              # Semantic human parsing
+│   ├── DensePose/         # DensePose implementation
+│   └── flux/              # Model flux components
+├── detectron2/            # Detectron2 framework
+├── requirements.txt       # Python dependencies
+└── README.md              # Project documentation
 ```
 
 ---
@@ -84,8 +91,8 @@ This repository implements a **virtual try-on** system that:
 
 ### 1. Clone & Setup
 ```bash
-git clone https://github.com/yourusername/virtual-try-on.git
-cd virtual-try-on
+git clone https://github.com/yourusername/COTTON-size-does-matter.git
+cd "COTTON-size-does-matter/Virtual Try On"
 ```
 
 ### 2. Python Environment
@@ -95,72 +102,181 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-> *Alternatively: use `conda env create -f environment.yml`.*
-
 ### 3. Frontend Dependencies
-```bash
-cd FrontEnd
-npm install      # or pnpm install
+```powershell
+cd frontend
+npm install
 ```
 
 ---
 
 ## 🖥 Usage
 
-### Backend (API)
+### Backend (FastAPI)
 ```powershell
-# from project root
-cd .
-python engine/trainer.py     # for training (optional)
-python engine/inference.py    # start REST API on http://localhost:8000
+# Navigate to the FastAPI directory
+cd frontend\fastAPI
+python main.py  # Starts the FastAPI server on http://localhost:8000
 ```
 
 Endpoints:
-- `POST /api/tryon`  
-  • Body: `{ "person": "<base64-img>", "garment": "<base64-img>" }`  
-  • Returns: `{ "output": "<base64-img>" }`
+- `POST /api/try-on`  
+  • Body: Form data with `user_image`, `cloth_image`, and `category_id`  
+  • Returns: `{ "status": "success", "data": { "id", "status", "user_image_url", "cloth_image_url", "cloth_type" } }`
 
-### Frontend (Web UI)
-```bash
-cd FrontEnd
-npm run dev           # starts on http://localhost:3000
+- `GET /api/try-on/{try_on_id}`  
+  • Returns: `{ "status": "success", "data": { "id", "status", "user_image_url", "cloth_image_url", "result_image_url" } }`
+
+### Frontend (Next.js)
+```powershell
+cd frontend
+npm run dev  # Starts the Next.js app on http://localhost:3000
 ```
-Open your browser → pick person & cloth → click “Try On.”
+Open your browser → upload a person & clothing image → click "Try On."
 
 ---
 
 ## ⚙️ Configuration
 
-All runtime params live in `densepose/config.py` &  
-`FrontEnd/.env.local`:
+### Environment Variables
+Create a `.env` file in the `frontend/fastAPI` directory with the following variables:
+
 ```env
-BACKEND_URL=http://localhost:8000
-MODEL_PATH=/path/to/checkpoint.pth
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+GPU_ENDPOINT_URL=optional_gpu_endpoint_for_processing
+```
+
+### Next.js Configuration
+Update `frontend/.env.local` if needed:
+```env
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
 
 Use OmegaConf YAML files under `/densepose/configs/` to override training/inference settings.
 
 ---
 
-## 📸 Examples
+## 🔑 Setting Up External Services
 
-| Input Person        | Input Garment        | Output Try-On      |
-|:-------------------:|:--------------------:|:------------------:|
-| ![](.../docs/person1.jpg) | ![](.../docs/cloth1.png) | ![](.../docs/output1.jpg) |
+The application relies on three external services that you need to set up before running. After setting up each service, copy the required values into your `.env` file in `frontend/fastAPI`.
+
+### 1. Supabase Setup
+
+1. Create a free account at [Supabase](https://supabase.com/)
+2. Create a new project
+3. Once your project is created, navigate to Project Settings > API
+4. Copy the `URL` and `anon/public` key to your `.env` file:
+   ```
+   SUPABASE_URL=your_supabase_url
+   SUPABASE_ANON_KEY=your_anon_key
+   ```
+5. Create a table named `try_on_history` with the following columns:
+   - `id` (primary key, UUID)
+   - `user_image_url` (text)
+   - `cloth_image_url` (text)
+   - `cloth_type` (text)
+   - `status` (text)
+   - `result_image_url` (text, nullable)
+   - `created_at` (timestamp with timezone)
+   - `completed_at` (timestamp with timezone, nullable)
+   - `error` (text, nullable)
+
+**Tip:** You can use the Supabase Table Editor UI to create these columns easily.
+
+### 2. Cloudinary Setup
+
+1. Create a free account at [Cloudinary](https://cloudinary.com/)
+2. From your dashboard, copy the following credentials to your `.env` file:
+   ```
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
+   ```
+
+**Tip:** You can find these values in your Cloudinary dashboard under Account Details.
+
+### 3. Ngrok GPU Endpoint (Optional, for AI processing)
+
+1. Run the `Ngrok-GPU-Endpoint.ipynb` notebook on a GPU instance:
+   - Upload to [Kaggle](https://www.kaggle.com/) and use a T4 GPU
+   - Or use any other GPU cloud service (Google Colab, etc.)
+2. The notebook will generate an Ngrok endpoint URL
+3. Add this URL to your `.env` file with `/process-images` appended:
+   ```
+   GPU_ENDPOINT_URL=https://your-ngrok-url.ngrok-free.app/process-images
+   ```
+
+**Tip:** The Ngrok endpoint should look like `https://xxxx-xx-xx-xx-xx.ngrok-free.app/process-images`. Make sure to include `/process-images` at the end.
+
+**How to use:**
+1. Run the Ngrok-GPU-Endpoint notebook on Kaggle (T4 GPU) or any other GPU instance.
+2. Copy the Ngrok public URL shown in the notebook output.
+3. Add `/process-images` to the end of the URL and set it as `GPU_ENDPOINT_URL` in your `.env` file in `frontend/fastAPI`.
+4. Start the backend and frontend as described below.
+5. Your app is now ready for use!
+
+Without the GPU endpoint, the application will still work using local image processing, but the try-on results will be of lower quality.
 
 ---
 
-## 🔧 Testing & CI
+## 🚀 Quick Start Guide
 
-- Run Python lint & tests:
-  ```bash
-  pytest --maxfail=1 --disable-warnings -q
-  ```
-- Frontend lint:
-  ```bash
-  cd FrontEnd && npm run lint
-  ```
-- GitHub Actions in `.github/workflows/ci.yml` automates checks on each PR.
+1. **Setup External Services**
+   - Configure Supabase, Cloudinary, and Ngrok as described in the [Setting Up External Services](#-setting-up-external-services) section
+   - Create `.env` file in the `frontend/fastAPI` directory with the obtained credentials
+
+2. **Start the Backend**
+   ```powershell
+   cd "COTTON-size-does-matter-main\Virtual Try On\frontend\fastAPI"
+   python main.py
+   ```
+
+3. **Start the Frontend**
+   ```powershell
+   cd "COTTON-size-does-matter-main\Virtual Try On\frontend"
+   npm run dev
+   ```
+
+4. **Access the Application**
+   - Open your browser and navigate to http://localhost:3000
+   - Upload a person image and a clothing item image
+   - Select a category and click "Try On"
+   - View and download the result
+
+---
+
+## 📸 Sample Results
+
+| Input Person | Input Garment | Output Try-On |
+|:------------:|:-------------:|:-------------:|
+| ![Person Image](./placeholder-person.jpg) | ![Garment Image](./placeholder-garment.jpg) | ![Result Image](./placeholder-result.jpg) |
+| ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
+
+---
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+1. **Environment Variables Not Loading**
+   - Ensure your `.env` file is encoded as UTF-8 without BOM
+   - Check that all required variables are set correctly
+
+2. **API Endpoints Return 404**
+   - Verify FastAPI server is running on port 8000
+   - Check if routes are correctly registered
+
+3. **Image Processing Fails**
+   - Ensure Cloudinary credentials are correct
+   - Verify uploaded images are in supported formats (JPEG, PNG)
+
+4. **Frontend Can't Connect to Backend**
+   - Check CORS settings in FastAPI
+   - Verify the backend URL in Next.js configuration
 
 ---
 
