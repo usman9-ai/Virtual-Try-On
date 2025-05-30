@@ -1,29 +1,4 @@
-# Virtual Try-On with DensePose & Stable Diffusion
-
-**A research-grade pipeline to transfer garments onto human images using DensePose + diffusion models, with a Next.js/FastAPI front-end and backend.**
-
----
-
-## 🔍 Table of Contents
-
-1. [Project Overview](#project-overview)  
-2. [Quick Start Guide](#-quick-start-guide)  
-3. [Directory Structure](#directory-structure)  
-4. [Methodology](#methodology)  
-5. [Installation](#installation)  
-6. [Setting Up External Services](#-setting-up-external-services)  
-7. [Usage](#usage)  
-   - [Backend (FastAPI)](#backend-fastapi)  
-   - [Frontend (Next.js)](#frontend-nextjs)  
-8. [Configuration](#configuration)  
-9. [Sample Results](#sample-results)  
-10. [Troubleshooting](#troubleshooting)  
-11. [Contributing](#contributing)  
-12. [License](#license)  
-
----
-
-## 📖 Project Overview
+## Project Description
 
 This repository implements a **virtual try-on** system that:
 
@@ -32,35 +7,8 @@ This repository implements a **virtual try-on** system that:
 3. Fuses the garment onto the person via image processing techniques and optionally via a diffusion-based pipeline for photorealism.  
 4. Provides a **Next.js** frontend with a **FastAPI** backend for user interaction and image processing.
 
----
 
-## 🗂 Directory Structure
-
-```text
-.
-├── frontend/              # Next.js application
-│   ├── app/               # page & API routes
-│   ├── components/        # UI components
-│   ├── fastAPI/           # FastAPI backend server
-│   ├── styles/            # CSS and styling
-│   └── utils/             # client-side helpers
-├── densepose/             # DensePose integration
-│   ├── modeling/          # Model architecture
-│   ├── data/              # Dataset handling
-│   ├── evaluation/        # Metrics and evaluation
-│   └── utils/             # Utilities for DensePose
-├── model/                 # custom model code & pipeline
-│   ├── SCHP/              # Semantic human parsing
-│   ├── DensePose/         # DensePose implementation
-│   └── flux/              # Model flux components
-├── detectron2/            # Detectron2 framework
-├── requirements.txt       # Python dependencies
-└── README.md              # Project documentation
-```
-
----
-
-## ⚙️ Methodology
+## Methodology
 
 1. **Person Detection & DensePose**  
    - Load input image → run Detectron2’s person detector.  
@@ -87,7 +35,7 @@ This repository implements a **virtual try-on** system that:
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### 1. Clone & Setup
 ```bash
@@ -110,7 +58,7 @@ npm install
 
 ---
 
-## 🖥 Usage
+## Usage
 
 ### Backend (FastAPI)
 ```powershell
@@ -136,7 +84,7 @@ Open your browser → upload a person & clothing image → click "Try On."
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### Environment Variables
 Create a `.env` file in the `frontend/fastAPI` directory with the following variables:
@@ -160,7 +108,7 @@ Use OmegaConf YAML files under `/densepose/configs/` to override training/infere
 
 ---
 
-## 🔑 Setting Up External Services
+## Setting Up External Services
 
 The application relies on three external services that you need to set up before running. After setting up each service, copy the required values into your `.env` file in `frontend/fastAPI`.
 
@@ -221,35 +169,8 @@ The application relies on three external services that you need to set up before
 
 Without the GPU endpoint, the application will still work using local image processing, but the try-on results will be of lower quality.
 
----
 
-## 🚀 Quick Start Guide
-
-1. **Setup External Services**
-   - Configure Supabase, Cloudinary, and Ngrok as described in the [Setting Up External Services](#-setting-up-external-services) section
-   - Create `.env` file in the `frontend/fastAPI` directory with the obtained credentials
-
-2. **Start the Backend**
-   ```powershell
-   cd "COTTON-size-does-matter-main\Virtual Try On\frontend\fastAPI"
-   python main.py
-   ```
-
-3. **Start the Frontend**
-   ```powershell
-   cd "COTTON-size-does-matter-main\Virtual Try On\frontend"
-   npm run dev
-   ```
-
-4. **Access the Application**
-   - Open your browser and navigate to http://localhost:3000
-   - Upload a person image and a clothing item image
-   - Select a category and click "Try On"
-   - View and download the result
-
----
-
-## 📸 Sample Results
+## Sample Results
 
 | Input Person | Input Garment | Output Try-On |
 |:------------:|:-------------:|:-------------:|
@@ -278,16 +199,6 @@ Without the GPU endpoint, the application will still work using local image proc
    - Check CORS settings in FastAPI
    - Verify the backend URL in Next.js configuration
 
----
-
-## 🤝 Contributing
-
-1. Fork → create feature branch  
-2. Write tests + docs  
-3. Open a PR with clear description  
-4. Agree to the [Code of Conduct](./CODE_OF_CONDUCT.md)
-
----
 
 ## 📄 License
 
