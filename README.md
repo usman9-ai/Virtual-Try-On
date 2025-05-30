@@ -1,3 +1,13 @@
+
+## Sample Results
+
+| Input Person | Input Garment | Output Try-On |
+|:------------:|:-------------:|:-------------:|
+| ![Person Image](./placeholder-person.jpg) | ![Garment Image](./placeholder-garment.jpg) | ![Result Image](./placeholder-result.jpg) |
+| ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
+
+---
+
 ## Project Description
 
 This repository implements a **virtual try-on** system that:
@@ -169,15 +179,6 @@ The application relies on three external services that you need to set up before
 
 Without the GPU endpoint, the application will still work using local image processing, but the try-on results will be of lower quality.
 
-
-## Sample Results
-
-| Input Person | Input Garment | Output Try-On |
-|:------------:|:-------------:|:-------------:|
-| ![Person Image](./placeholder-person.jpg) | ![Garment Image](./placeholder-garment.jpg) | ![Result Image](./placeholder-result.jpg) |
-| ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
-
----
 
 ## 🔧 Troubleshooting
 
