@@ -2,7 +2,6 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTa
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from supabase import create_client, Client
-from dotenv import load_dotenv
 import uvicorn
 import cloudinary
 import cloudinary.uploader
@@ -15,8 +14,24 @@ import aiohttp
 import traceback
 import sys
 
-# Load environment variables
-load_dotenv()
+# Manually load .env file with UTF-8 encoding
+try:
+    env_path = os.path.join(os.path.dirname(__file__), '.env')
+    with open(env_path, 'r', encoding='utf-8') as env_file:
+        env_content = env_file.read()
+        print(".env file content:")
+        print(env_content)  # Debugging: Print the content of the .env file
+        for line in env_content.splitlines():
+            if line.strip() and not line.startswith('#'):
+                key, value = line.split('=', 1)
+                os.environ[key.strip()] = value.strip()
+    print("Environment variables loaded successfully.")
+except UnicodeDecodeError as e:
+    print(f"Error decoding .env file: {e}")
+    sys.exit(1)
+except Exception as e:
+    print(f"Unexpected error loading .env file: {e}")
+    sys.exit(1)
 
 # Check for required environment variables
 required_env_vars = [
