@@ -3,11 +3,11 @@
 
 | Input Person | Input Garment | Output Try-On |
 |:------------:|:-------------:|:-------------:|
-| ![Person Image](images/person1.jpg) | ![Garment Image](./placeholder-garment.jpg) | ![Result Image](./placeholder-result.jpg) |
-| ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
-| ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
-| ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
-| ![Person Image](./placeholder-person2.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
+| ![Person Image](images/person1.jpg) | ![Garment Image](images/cloth1.jpg) | ![Result Image](images/result1.jpg) |
+| ![Person Image](images/person2.jpg) | ![Garment Image](images/cloth2.jpg) | ![Result Image](./placeholder-result2.jpg) |
+| ![Person Image](images/person3.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
+| ![Person Image](images/person4.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
+| ![Person Image](images/person5.jpg) | ![Garment Image](./placeholder-garment2.jpg) | ![Result Image](./placeholder-result2.jpg) |
 
 ---
 
